@@ -19,8 +19,8 @@ def read_file(file_name):
   
   for record in range(num_records): 
     record_type = file_content[i]
-    timestamp = int.from_bytes(file_content[i+1:i+5])
-    user_id = int.from_bytes(file_content[i+5:i+13])    
+    timestamp = int.from_bytes(file_content[i+1:i+5], byteorder='big')
+    user_id = int.from_bytes(file_content[i+5:i+13], byteorder='big')    
     if user_id == MAGIC_USER_ID:
       if record_type == 0x01 or record_type == 0x00:
         user_balance += int.from_bytes(file_content[i+13:i+21], byteorder='big')
@@ -39,13 +39,14 @@ def read_file(file_name):
       num_autopays_ended += 1
       i += 13
     else:
-      print('ERROR: invalid record type ' + record_type)
+      print('ERROR: invalid record type ' + str(record_type))
       exit() 
-  print 'Total amount in dollars of debits: ' + debit_total 
-  print 'Total amount in dollars of credits: ' + credit_total
-  print 'Total number of autopays started: ' + num_autopays_started
-  print 'Total number of autopays ended: ' + num_autopays_ended
-  print 'Balance of user ID 2456938384156277127: ' + user_balance
+  
+  print('Total amount in dollars of debits: ' + debit_total) 
+  print('Total amount in dollars of credits: ' + credit_total)
+  print('Total number of autopays started: ' + num_autopays_started)
+  print('Total number of autopays ended: ' + num_autopays_ended)
+  print('Balance of user ID 2456938384156277127: ' + user_balance)
 
 test_file_name = './test_files/txnlog.dat'
 read_file(test_file_name)
